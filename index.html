@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface de Atividades Educativas</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            background-color: #8533f1;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-y: auto;
+        }
+        .image-container {
+            background: linear-gradient(135deg, #6f27c2, #8533f1);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        .instructions h2 {
+            margin: 0 0 20px 0;
+            font-size: 20px;
+            color: #fff;
+        }
+        .instructions {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .image-container img {
+            width: 100%;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+        @media (min-width: 600px) {
+            .image-container {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="instructions">
+        <h2>Instruções para baixar a atividade:</h2>
+        <p>Mantenha o dedo pressionado na imagem da atividade para baixar. Veja a demonstração abaixo:</p>
+        <img src="https://github.com/StudyTask-ai/BANCO-DE-IMAGENS/blob/main/image.gif?raw=true" alt="Demonstração" style="width: 100px; margin-top: 10px;">
+    </div>
+
+    <div class="image-container">
+        <img id="activity-image" src="https://github.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/blob/main/IMG_20240904_205913.jpg?raw=true" alt="Imagem da Atividade">
+        <audio id="audio" preload="auto">
+            <source src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DE-IMAGENS/main/generated-voice-abf4faeb-f468-422d-8956-c3b722f6f27a.mp3" type="audio/mp3">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audio');
+        const activityImage = document.getElementById('activity-image');
+
+        // Tocar o áudio quando a imagem é clicada
+        activityImage.addEventListener('click', () => {
+            audio.play();
+        });
+    </script>
+</body>
+</html>

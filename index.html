@@ -16,6 +16,34 @@
             font-family: Arial, sans-serif;
             overflow-y: auto;
         }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            animation: gradientBackground 3s infinite alternate;
+            padding: 20px;
+            border-radius: 15px;
+            background: linear-gradient(90deg, #ff0057, #ffa500, #32cd32, #1e90ff, #ff00ff);
+            background-size: 400% 400%;
+        }
+
+        .header img {
+            width: 50px;
+            margin-right: 15px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: white;
+            margin: 0;
+        }
+
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
         .image-container {
             background: linear-gradient(135deg, #6f27c2, #8533f1);
             border-radius: 15px;
@@ -28,22 +56,25 @@
             position: relative;
             overflow: hidden;
         }
-        .instructions h2 {
-            margin: 0 0 20px 0;
-            font-size: 20px;
-            color: #fff;
-        }
+
         .instructions {
             color: #fff;
             text-align: center;
             margin-bottom: 20px;
             font-size: 16px;
         }
+
+        .instructions img {
+            width: 100px; /* Define o tamanho do GIF */
+            margin-top: 10px;
+        }
+
         .image-container img {
-            width: 100%;
+            width: 100%; /* Ajusta a largura da imagem para preencher o container */
             border-radius: 15px;
             transition: transform 0.3s ease;
         }
+
         @media (min-width: 600px) {
             .image-container {
                 width: 80%;
@@ -53,16 +84,37 @@
 </head>
 <body>
 
+    <div class="header">
+        <img src="https://raw.githubusercontent.com/Luanzinh0fc/Luanzinh0fc-Banco-de-dados-p-blicos/main/1000008714-removebg.png" alt="Ícone do StudyTask">
+        <h1>StudyTask</h1>
+    </div>
+
     <div class="instructions">
         <h2>Instruções para baixar a atividade:</h2>
         <p>Mantenha o dedo pressionado na imagem da atividade para baixar. Veja a demonstração abaixo:</p>
-        <img src="https://github.com/StudyTask-ai/BANCO-DE-IMAGENS/blob/main/image.gif?raw=true" alt="Demonstração" style="width: 100px; margin-top: 10px;">
+        <img src="https://raw.githubusercontent.com/StudyTask-ai/-DE-IMAGENS/main/Gif%20sem%20Fundo%20.gif" alt="Novo GIF">
     </div>
 
     <div class="image-container">
-        <img id="activity-image" src="https://github.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/blob/main/IMG_20240904_205913.jpg?raw=true" alt="Imagem da Atividade">
+        <img id="activity-image" src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/IN%C3%8DCIO%20DA%20ATIVIDADE%20DE%20MATEM%C3%81TICA%201.jpg" alt="Imagem da Atividade 1">
         <audio id="audio" preload="auto">
-            <source src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DE-IMAGENS/main/generated-voice-abf4faeb-f468-422d-8956-c3b722f6f27a.mp3" type="audio/mp3">
+            <source src="https://raw.githubusercontent.com/StudyTask-ai/-DE-IMAGENS/main/melhor%20voz.mp3" type="audio/mp3">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+    </div>
+
+    <div class="image-container">
+        <img id="activity-image2" src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/ATIVIDADE%202%20MATEM%C3%81TICA.jpg" alt="Imagem da Atividade 2">
+        <audio id="audio2" preload="auto">
+            <source src="https://raw.githubusercontent.com/StudyTask-ai/-DE-IMAGENS/main/melhor%20voz.mp3" type="audio/mp3">
+            Seu navegador não suporta o elemento de áudio.
+        </audio>
+    </div>
+
+    <div class="image-container">
+        <img id="activity-image3" src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/MATEM%C3%81TICA%20ATIVIDADE%203.jpg" alt="Imagem da Atividade 3">
+        <audio id="audio3" preload="auto">
+            <source src="https://raw.githubusercontent.com/StudyTask-ai/-DE-IMAGENS/main/melhor%20voz.mp3" type="audio/mp3">
             Seu navegador não suporta o elemento de áudio.
         </audio>
     </div>
@@ -71,9 +123,25 @@
         const audio = document.getElementById('audio');
         const activityImage = document.getElementById('activity-image');
 
-        // Tocar o áudio quando a imagem é clicada
+        const audio2 = document.getElementById('audio2');
+        const activityImage2 = document.getElementById('activity-image2');
+
+        const audio3 = document.getElementById('audio3');
+        const activityImage3 = document.getElementById('activity-image3');
+
+        // Tocar o áudio quando a primeira imagem é clicada
         activityImage.addEventListener('click', () => {
             audio.play();
+        });
+
+        // Tocar o áudio quando a segunda imagem é clicada
+        activityImage2.addEventListener('click', () => {
+            audio2.play();
+        });
+
+        // Tocar o áudio quando a terceira imagem é clicada
+        activityImage3.addEventListener('click', () => {
+            audio3.play();
         });
     </script>
 </body>

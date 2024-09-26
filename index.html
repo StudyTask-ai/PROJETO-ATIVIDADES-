@@ -15,26 +15,27 @@
             margin: 0;
             font-family: Arial, sans-serif;
             overflow-y: auto;
+            padding: 10px;
         }
 
         .header {
             display: flex;
             align-items: center;
-            margin: 20px 0;
+            margin: 10px 0;
             animation: gradientBackground 3s infinite alternate;
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
             background: linear-gradient(90deg, #ff0057, #ffa500, #32cd32, #1e90ff, #ff00ff);
             background-size: 400% 400%;
         }
 
         .header img {
-            width: 50px;
-            margin-right: 15px;
+            width: 40px;
+            margin-right: 10px;
         }
 
         .header h1 {
-            font-size: 24px;
+            font-size: 20px;
             color: white;
             margin: 0;
         }
@@ -44,41 +45,62 @@
             100% { background-position: 100% 50%; }
         }
 
-        .image-container {
-            background: linear-gradient(135deg, #6f27c2, #8533f1);
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
+        .carousel-container {
             position: relative;
+            width: 100%;
+            max-width: 400px;
             overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .carousel-images {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-images img {
+            width: 100%;
+            border-radius: 10px;
+            cursor: grab;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 10px;
+        }
+
+        .carousel-controls button {
+            background-color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            margin: 0 5px;
         }
 
         .instructions {
             color: #fff;
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 16px;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
 
         .instructions img {
-            width: 100px; /* Define o tamanho do GIF */
+            width: 80px;
             margin-top: 10px;
         }
 
-        .image-container img {
-            width: 100%; /* Ajusta a largura da imagem para preencher o container */
-            border-radius: 15px;
-            transition: transform 0.3s ease;
-        }
-
-        @media (min-width: 600px) {
-            .image-container {
-                width: 80%;
-            }
+        .navigation-instructions {
+            color: #fff;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -95,54 +117,100 @@
         <img src="https://raw.githubusercontent.com/StudyTask-ai/-DE-IMAGENS/main/Gif%20sem%20Fundo%20.gif" alt="Novo GIF">
     </div>
 
-    <div class="image-container">
-        <img id="activity-image" src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/IN%C3%8DCIO%20DA%20ATIVIDADE%20DE%20MATEM%C3%81TICA%201.jpg" alt="Imagem da Atividade 1">
-        <audio id="audio" preload="auto">
-            <source src="https://raw.githubusercontent.com/StudyTask-ai/-DE-IMAGENS/main/melhor%20voz.mp3" type="audio/mp3">
-            Seu navegador não suporta o elemento de áudio.
-        </audio>
+    <div class="carousel-container">
+        <div class="carousel-images" id="carousel-images">
+            <img src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/IN%C3%8DCIO%20DA%20ATIVIDADE%20DE%20MATEM%C3%81TICA%201.jpg" alt="Imagem da Atividade 1">
+            <img src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/ATIVIDADE%202%20MATEM%C3%81TICA.jpg" alt="Imagem da Atividade 2">
+            <img src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/MATEM%C3%81TICA%20ATIVIDADE%203.jpg" alt="Imagem da Atividade 3">
+        </div>
     </div>
 
-    <div class="image-container">
-        <img id="activity-image2" src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/ATIVIDADE%202%20MATEM%C3%81TICA.jpg" alt="Imagem da Atividade 2">
-        <audio id="audio2" preload="auto">
-            <source src="https://raw.githubusercontent.com/StudyTask-ai/-DE-IMAGENS/main/melhor%20voz.mp3" type="audio/mp3">
-            Seu navegador não suporta o elemento de áudio.
-        </audio>
+    <div class="carousel-controls">
+        <button onclick="previousImage()">Anterior</button>
+        <button onclick="nextImage()">Próximo</button>
     </div>
 
-    <div class="image-container">
-        <img id="activity-image3" src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/MATEM%C3%81TICA%20ATIVIDADE%203.jpg" alt="Imagem da Atividade 3">
-        <audio id="audio3" preload="auto">
-            <source src="https://raw.githubusercontent.com/StudyTask-ai/-DE-IMAGENS/main/melhor%20voz.mp3" type="audio/mp3">
-            Seu navegador não suporta o elemento de áudio.
-        </audio>
+    <div class="navigation-instructions">
+        <p>Aperte no botão "Próximo" para ver a próxima imagem e no botão "Anterior" para voltar à imagem anterior.</p>
     </div>
+
+    <!-- Incluindo a biblioteca Hammer.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
 
     <script>
-        const audio = document.getElementById('audio');
-        const activityImage = document.getElementById('activity-image');
+        let currentIndex = 0;
 
-        const audio2 = document.getElementById('audio2');
-        const activityImage2 = document.getElementById('activity-image2');
+        function updateCarousel() {
+            const carouselImages = document.getElementById('carousel-images');
+            const offset = -currentIndex * 100; // Percentual para deslocar
+            carouselImages.style.transform = `translateX(${offset}%)`;
+        }
 
-        const audio3 = document.getElementById('audio3');
-        const activityImage3 = document.getElementById('activity-image3');
+        function nextImage() {
+            const images = document.querySelectorAll('.carousel-images img');
+            currentIndex = (currentIndex + 1) % images.length;
+            updateCarousel();
+        }
 
-        // Tocar o áudio quando a primeira imagem é clicada
-        activityImage.addEventListener('click', () => {
-            audio.play();
-        });
+        function previousImage() {
+            const images = document.querySelectorAll('.carousel-images img');
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateCarousel();
+        }
 
-        // Tocar o áudio quando a segunda imagem é clicada
-        activityImage2.addEventListener('click', () => {
-            audio2.play();
-        });
+        // Implementação do zoom por gesto de pinça e deslizamento
+        const images = document.querySelectorAll('.carousel-images img');
+        
+        images.forEach(image => {
+            const hammer = new Hammer(image);
 
-        // Tocar o áudio quando a terceira imagem é clicada
-        activityImage3.addEventListener('click', () => {
-            audio3.play();
+            let scale = 1;
+            let lastScale = 1;
+            let posX = 0;
+            let posY = 0;
+            let lastPosX = 0;
+            let lastPosY = 0;
+            let maxPosX = 0;
+            let maxPosY = 0;
+            let transform = '';
+
+            hammer.get('pinch').set({ enable: true });
+            hammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+
+            hammer.on('pinchstart panstart', function() {
+                lastScale = scale;
+                lastPosX = posX;
+                lastPosY = posY;
+            });
+
+            hammer.on('pinch pan', function(event) {
+                if (event.type === 'pinch') {
+                    scale = Math.max(1, Math.min(lastScale * event.scale, 4));
+                }
+
+                if (scale > 1) {
+                    posX = lastPosX + event.deltaX;
+                    posY = lastPosY + event.deltaY;
+                    maxPosX = Math.ceil((scale - 1) * image.clientWidth / 2);
+                    maxPosY = Math.ceil((scale - 1) * image.clientHeight / 2);
+                    posX = Math.min(maxPosX, Math.max(-maxPosX, posX));
+                    posY = Math.min(maxPosY, Math.max(-maxPosY, posY));
+                } else {
+                    posX = 0;
+                    posY = 0;
+                }
+
+                transform = `translate3d(${posX}px, ${posY}px, 0) scale(${scale})`;
+                image.style.transform = transform;
+            });
+
+            hammer.on('pinchend panend', function() {
+                lastScale = scale;
+                lastPosX = posX;
+                lastPosY = posY;
+            });
         });
     </script>
+
 </body>
 </html>

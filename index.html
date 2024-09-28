@@ -6,7 +6,6 @@
     <title>Interface de Atividades Educativas</title>
     <style>
         :root {
-            /* Variáveis de tema padrão */
             --body-bg-color: #fff;
             --text-color: #333;
             --button-bg-color: #8533f1;
@@ -87,24 +86,6 @@
             display: block;
         }
 
-        .image-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            color: white;
-            font-size: 18px;
-            text-align: center;
-            transition: opacity 0.3s;
-            opacity: 1;
-        }
-
         .instructions {
             color: var(--text-color);
             text-align: center;
@@ -134,7 +115,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000; /* Ensures it's above other elements */
+            z-index: 1000;
         }
 
         .theme-toggle img {
@@ -160,6 +141,8 @@
             max-width: 100%;
             max-height: 100%;
             cursor: grab;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.2s ease;
         }
     </style>
 </head>
@@ -175,8 +158,9 @@
     </button>
 
     <div class="instructions">
-        <h2>Instruções para baixar a atividade:</h2>
-        <p>Mantenha o dedo pressionado na imagem da atividade para baixar. Veja a demonstração abaixo:</p>
+        <h2>Instruções:</h2>
+        <p>Para baixar a imagem, pressione a imagem até aparecerem as opções. Escolha a opção "Salvar" para baixar a imagem.</p>
+        <p>Toque na imagem para abrir em tela cheia. Deslize seu dedo para a direita ou para a esquerda para navegar pelas imagens.</p>
         <img src="https://raw.githubusercontent.com/StudyTask-ai/-DE-IMAGENS/main/Gif%20sem%20Fundo%20.gif" alt="Novo GIF">
     </div>
 
@@ -184,17 +168,11 @@
         <div class="carousel-images" id="carousel-images">
             <div class="image-wrapper">
                 <img src="https://raw.githubusercontent.com/StudyTask-ai/27-09-FONTES-DE-ENERGIA-/refs/heads/main/PARTE.jpg" alt="Imagem 1">
-                <div class="image-overlay">Toque na imagem para abrir</div>
             </div>
             <div class="image-wrapper">
                 <img src="https://raw.githubusercontent.com/StudyTask-ai/27-09-FONTES-DE-ENERGIA-/refs/heads/main/PARTE%202.jpg" alt="Imagem 2">
-                <div class="image-overlay">Toque na imagem para abrir</div>
             </div>
         </div>
-    </div>
-
-    <div class="navigation-instructions">
-        <p>Deslize seu dedo para a direita ou para a esquerda para navegar pelas imagens.</p>
     </div>
 
     <div class="fullscreen-image" id="fullscreen-image">
@@ -336,7 +314,7 @@
         function updateCarousel() {
             const carouselImages = document.getElementById('carousel-images');
             const offset = -currentIndex * 100; // Percentual para deslocar
-            carouselImages.style.transform = `translateX(${offset}%)`;
+            carouselImages.style.transform = `translate3d(${offset}%, 0, 0)`; // Usando transformações 3D para aceleração de hardware
         }
 
         const carouselContainer = document.querySelector('.carousel-container');
@@ -372,7 +350,11 @@
             wrapper.addEventListener('click', function() {
                 currentIndex = Array.from(imageWrappers).indexOf(wrapper);
                 fullscreenImg.src = imageWrappers[currentIndex].querySelector('img').src;
+                fullscreenImg.style.opacity = '0';
                 fullscreenContainer.style.display = 'flex';
+                setTimeout(() => {
+                    fullscreenImg.style.opacity = '1';
+                }, 50);
                 openFullscreen(fullscreenContainer);
             });
         });
@@ -398,13 +380,21 @@
         });
 
         function nextFullscreenImage() {
-            currentIndex = (currentIndex + 1) % imageWrappers.length;
-            fullscreenImg.src = imageWrappers[currentIndex].querySelector('img').src;
+            fullscreenImg.style.opacity = '0';
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % imageWrappers.length;
+                fullscreenImg.src = imageWrappers[currentIndex].querySelector('img').src;
+                fullscreenImg.style.opacity = '1';
+            }, 500); // Tempo da transição
         }
 
         function previousFullscreenImage() {
-            currentIndex = (currentIndex - 1 + imageWrappers.length) % imageWrappers.length;
-            fullscreenImg.src = imageWrappers[currentIndex].querySelector('img').src;
+            fullscreenImg.style.opacity = '0';
+            setTimeout(() => {
+                currentIndex = (currentIndex - 1 + imageWrappers.length) % imageWrappers.length;
+                fullscreenImg.src = imageWrappers[currentIndex].querySelector('img').src;
+                fullscreenImg.style.opacity = '1';
+            }, 500); // Tempo da transição
         }
 
         let scale = 1;
@@ -430,12 +420,12 @@
 
         imgHammer.on('pinch pan', function(event) {
             if (event.type === 'pinch') {
-                scale = Math.max(1, Math.min(lastScale * event.scale, 4));
+                scale = Math.max(1, Math.min(lastScale * (1 + (event.scale - 1) * 0.3), 4)); // Suaviza o zoom
             }
 
             if (scale > 1) {
-                posX = lastPosX + event.deltaX;
-                posY = lastPosY + event.deltaY;
+                posX = lastPosX + event.deltaX * 0.6; // Ajusta a velocidade de movimento horizontal
+                posY = lastPosY + event.deltaY * 0.6; // Ajusta a velocidade de movimento vertical
                 maxPosX = Math.ceil((scale - 1) * fullscreenImg.clientWidth / 2);
                 maxPosY = Math.ceil((scale - 1) * fullscreenImg.clientHeight / 2);
                 posX = Math.min(maxPosX, Math.max(-maxPosX, posX));
@@ -445,7 +435,7 @@
                 posY = 0;
             }
 
-            transform = `translate3d(${posX}px, ${posY}px, 0) scale(${scale})`;
+            transform = `translate3d(${posX}px, ${posY}px, 0) scale(${scale})`; // Usando transformações 3D
             fullscreenImg.style.transform = transform;
         });
 
@@ -478,6 +468,7 @@
                 document.msExitFullscreen();
             }
         }
+
     </script>
 
 </body>

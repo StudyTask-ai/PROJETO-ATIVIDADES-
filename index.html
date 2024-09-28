@@ -73,10 +73,36 @@
             transition: transform 0.5s ease;
         }
 
+        .carousel-images .image-wrapper {
+            position: relative;
+            width: 100%;
+            flex-shrink: 0;
+        }
+
         .carousel-images img {
             width: 100%;
             border-radius: 10px;
-            cursor: grab;
+            cursor: pointer;
+            user-select: none;
+            display: block;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            transition: opacity 0.3s;
+            opacity: 1;
         }
 
         .instructions {
@@ -108,12 +134,32 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 1000; /* Ensures it's above other elements */
         }
 
         .theme-toggle img {
             width: 30px;
             height: 30px;
             transition: transform 0.3s;
+        }
+
+        .fullscreen-image {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+        }
+
+        .fullscreen-image img {
+            max-width: 100%;
+            max-height: 100%;
+            cursor: grab;
         }
     </style>
 </head>
@@ -136,14 +182,23 @@
 
     <div class="carousel-container">
         <div class="carousel-images" id="carousel-images">
-            <img src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/IN%C3%8DCIO%20DA%20ATIVIDADE%20DE%20MATEM%C3%81TICA%201.jpg" alt="Imagem da Atividade 1">
-            <img src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/ATIVIDADE%202%20MATEM%C3%81TICA.jpg" alt="Imagem da Atividade 2">
-            <img src="https://raw.githubusercontent.com/StudyTask-ai/BANCO-DAS-ATIVIDADES-DO-3-BIMESTRE/ed3a9fd536fe80fc1869942f15742ea3daffd96a/MATEM%C3%81TICA%20ATIVIDADE%203.jpg" alt="Imagem da Atividade 3">
+            <div class="image-wrapper">
+                <img src="https://raw.githubusercontent.com/StudyTask-ai/27-09-FONTES-DE-ENERGIA-/refs/heads/main/PARTE.jpg" alt="Imagem 1">
+                <div class="image-overlay">Toque na imagem para abrir</div>
+            </div>
+            <div class="image-wrapper">
+                <img src="https://raw.githubusercontent.com/StudyTask-ai/27-09-FONTES-DE-ENERGIA-/refs/heads/main/PARTE%202.jpg" alt="Imagem 2">
+                <div class="image-overlay">Toque na imagem para abrir</div>
+            </div>
         </div>
     </div>
 
     <div class="navigation-instructions">
         <p>Deslize seu dedo para a direita ou para a esquerda para navegar pelas imagens.</p>
+    </div>
+
+    <div class="fullscreen-image" id="fullscreen-image">
+        <img id="fullscreen-img" src="" alt="Imagem em tela cheia">
     </div>
 
     <!-- Incluindo a biblioteca Hammer.js -->
@@ -287,6 +342,8 @@
         const carouselContainer = document.querySelector('.carousel-container');
         const hammer = new Hammer(carouselContainer);
 
+        hammer.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL });
+
         hammer.on('swipeleft', function() {
             nextImage();
         });
@@ -296,68 +353,131 @@
         });
 
         function nextImage() {
-            const images = document.querySelectorAll('.carousel-images img');
+            const images = document.querySelectorAll('.carousel-images .image-wrapper');
             currentIndex = (currentIndex + 1) % images.length;
             updateCarousel();
         }
 
         function previousImage() {
-            const images = document.querySelectorAll('.carousel-images img');
+            const images = document.querySelectorAll('.carousel-images .image-wrapper');
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             updateCarousel();
         }
 
-        const images = document.querySelectorAll('.carousel-images img');
-        
-        images.forEach(image => {
-            const imgHammer = new Hammer(image);
+        const imageWrappers = document.querySelectorAll('.carousel-images .image-wrapper');
+        const fullscreenContainer = document.getElementById('fullscreen-image');
+        const fullscreenImg = document.getElementById('fullscreen-img');
 
-            let scale = 1;
-            let lastScale = 1;
-            let posX = 0;
-            let posY = 0;
-            let lastPosX = 0;
-            let lastPosY = 0;
-            let maxPosX = 0;
-            let maxPosY = 0;
-            let transform = '';
-
-            imgHammer.get('pinch').set({ enable: true });
-            imgHammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-
-            imgHammer.on('pinchstart panstart', function() {
-                lastScale = scale;
-                lastPosX = posX;
-                lastPosY = posY;
-            });
-
-            imgHammer.on('pinch pan', function(event) {
-                if (event.type === 'pinch') {
-                    scale = Math.max(1, Math.min(lastScale * event.scale, 4));
-                }
-
-                if (scale > 1) {
-                    posX = lastPosX + event.deltaX;
-                    posY = lastPosY + event.deltaY;
-                    maxPosX = Math.ceil((scale - 1) * image.clientWidth / 2);
-                    maxPosY = Math.ceil((scale - 1) * image.clientHeight / 2);
-                    posX = Math.min(maxPosX, Math.max(-maxPosX, posX));
-                    posY = Math.min(maxPosY, Math.max(-maxPosY, posY));
-                } else {
-                    posX = 0;
-                    posY = 0;
-                }
-
-                transform = `translate3d(${posX}px, ${posY}px, 0) scale(${scale})`;
-                image.style.transform = transform;
-            });
-
-            imgHammer.on('pinchend panend', function() {
-                lastScale = scale;
-                lastPosX = posX;
-                lastPosY = posY;
+        imageWrappers.forEach(wrapper => {
+            wrapper.addEventListener('click', function() {
+                currentIndex = Array.from(imageWrappers).indexOf(wrapper);
+                fullscreenImg.src = imageWrappers[currentIndex].querySelector('img').src;
+                fullscreenContainer.style.display = 'flex';
+                openFullscreen(fullscreenContainer);
             });
         });
+
+        fullscreenContainer.addEventListener('click', function() {
+            closeFullscreen();
+            fullscreenContainer.style.display = 'none';
+        });
+
+        const fullscreenHammer = new Hammer(fullscreenContainer);
+        fullscreenHammer.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL });
+
+        fullscreenHammer.on('swipeleft', function() {
+            if (scale === 1) {
+                nextFullscreenImage();
+            }
+        });
+
+        fullscreenHammer.on('swiperight', function() {
+            if (scale === 1) {
+                previousFullscreenImage();
+            }
+        });
+
+        function nextFullscreenImage() {
+            currentIndex = (currentIndex + 1) % imageWrappers.length;
+            fullscreenImg.src = imageWrappers[currentIndex].querySelector('img').src;
+        }
+
+        function previousFullscreenImage() {
+            currentIndex = (currentIndex - 1 + imageWrappers.length) % imageWrappers.length;
+            fullscreenImg.src = imageWrappers[currentIndex].querySelector('img').src;
+        }
+
+        let scale = 1;
+        let lastScale = 1;
+        let posX = 0;
+        let posY = 0;
+        let lastPosX = 0;
+        let lastPosY = 0;
+        let maxPosX = 0;
+        let maxPosY = 0;
+        let transform = '';
+
+        const imgHammer = new Hammer(fullscreenImg);
+
+        imgHammer.get('pinch').set({ enable: true });
+        imgHammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+
+        imgHammer.on('pinchstart panstart', function() {
+            lastScale = scale;
+            lastPosX = posX;
+            lastPosY = posY;
+        });
+
+        imgHammer.on('pinch pan', function(event) {
+            if (event.type === 'pinch') {
+                scale = Math.max(1, Math.min(lastScale * event.scale, 4));
+            }
+
+            if (scale > 1) {
+                posX = lastPosX + event.deltaX;
+                posY = lastPosY + event.deltaY;
+                maxPosX = Math.ceil((scale - 1) * fullscreenImg.clientWidth / 2);
+                maxPosY = Math.ceil((scale - 1) * fullscreenImg.clientHeight / 2);
+                posX = Math.min(maxPosX, Math.max(-maxPosX, posX));
+                posY = Math.min(maxPosY, Math.max(-maxPosY, posY));
+            } else {
+                posX = 0;
+                posY = 0;
+            }
+
+            transform = `translate3d(${posX}px, ${posY}px, 0) scale(${scale})`;
+            fullscreenImg.style.transform = transform;
+        });
+
+        imgHammer.on('pinchend panend', function() {
+            lastScale = scale;
+            lastPosX = posX;
+            lastPosY = posY;
+        });
+
+        function openFullscreen(elem) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { /* Firefox */
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+                elem.msRequestFullscreen();
+            }
+        }
+
+        function closeFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) { /* Firefox */
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE/Edge */
+                document.msExitFullscreen();
+            }
+        }
     </script>
 
 </body>
